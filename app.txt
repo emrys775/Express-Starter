@@ -1,0 +1,101 @@
+// const http = require('http')
+
+// const hostname = '127.0.0.1'
+// const port = 5000;
+
+// const server = http.createServer((req, res) => {
+//     res.statusCode = 200;
+//     res.setHeader('content-Type', 'text/plain');
+//     res.end('Hello Node....:)');
+// });
+
+// server.listen(port, hostname, () => {
+//     console.log('server is running....');
+// });
+
+const express = require("express"); //importing express and put it in a variable called express
+
+// const hostname = "127.0.0.1";
+const port = 5000; // create a variable port n give it a value of 5000
+
+let todos = [{ id: 1, task: "call mom", date: "20/08/2020", completed: false }]; //array variable
+
+const app = express(); //creating an instance for express
+app.use(express.json()); //calling the method use on app
+
+app.get("/", (req, res) => {
+  //calling a method get and it takes in 2 function i.e req n res
+  //request method
+  res.status(200).json(todos);
+});
+
+app.get("/:id", (req, res) => {
+  id = req.params.id;
+
+  todos.forEach((todo) => {
+    // we use this method to look tru a list
+    if (todo.id == id) {
+      res.status(200).json(todo);
+    }
+  });
+  res.status(404).json({ error: "todo not found" });
+});
+
+app.delete("/:id", (req, res) => {
+  id = req.params.id;
+
+  newTodos = [];
+
+  todos.forEach((todo) => {
+    if (todo.id !== id) {
+      newTodos.push(todo);
+    }
+  });
+  todos = newTodos;
+
+  res.status(201).send();
+});
+
+app.post("/", (req, res) => {
+  todo = req.body;
+  todo.id = todos.length + 1;
+  todos.push(todo);
+
+  res.status(201).send();
+});
+
+app.put("/:id", (req, res) => {
+  const todoID = req.params.id;
+  const update = req.body;
+
+  const newTodo = [];
+  console.log(update.task);
+
+  todos.forEach((todo) => {
+    if ((todo.id = todoID)) {
+      if (update.completed !== undefined) {
+        todo.completed = update.task;
+      }
+
+      if (update.task !== undefined) {
+        todo.task = update.task;
+      }
+
+      if (update.date !== undefined) {
+        todo.date = update.task;
+      }
+    }
+    newTodos.push(todo);
+  });
+
+  if (!todoFound) {
+    res.status(403).send;
+  }
+  todos = newTodos;
+
+  res.status(20);
+});
+
+app.listen(port, () => {
+  console.log("server is running....");
+});
